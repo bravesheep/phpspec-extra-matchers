@@ -1,11 +1,12 @@
 <?php
 
-namespace Bravesheep\PhpspecExtraMatchers\Matcher;
+namespace Bravesheep\PhpspecExtraMatchers\Matcher\Mink;
 
 use Behat\Mink\Session;
+use Bravesheep\PhpspecExtraMatchers\Matcher\SimpleMatcher;
 use PhpSpec\Exception\Example\FailureException;
 
-class MinkRegexUrlMatcher extends MinkUrlMatcher
+class StatusCodeMatcher extends SimpleMatcher
 {
     /**
      * {@inheritdoc}
@@ -14,9 +15,7 @@ class MinkRegexUrlMatcher extends MinkUrlMatcher
     {
         /** @var Session $session */
         $session = $subject;
-        $regex = $arguments[0];
-        $currentAddress = $this->cleanPath($session->getCurrentUrl());
-        return 1 === preg_match($regex, $currentAddress);
+        return intval($session->getStatusCode()) === intval($arguments[0]);
     }
 
     /**
@@ -29,9 +28,9 @@ class MinkRegexUrlMatcher extends MinkUrlMatcher
     protected function getFailureException($name, $subject, array $arguments)
     {
         return new FailureException(sprintf(
-            'Expected %s to match %s, but it does not.',
-            $this->presenter->presentString($this->cleanPath($subject->getCurrentUrl())),
-            $this->presenter->presentString($arguments[0])
+            'Expected session to have status code %s, but it is %s.',
+            $this->presenter->presentValue($subject->getCurrentUrl()),
+            $this->presenter->presentValue($arguments[0])
         ));
     }
 
@@ -45,17 +44,34 @@ class MinkRegexUrlMatcher extends MinkUrlMatcher
     protected function getNegativeFailureException($name, $subject, array $arguments)
     {
         return new FailureException(sprintf(
-            'Expected %s not to match %s, but it does.',
-            $this->presenter->presentString($this->cleanPath($subject->getCurrentUrl())),
-            $this->presenter->presentString($arguments[0])
+            'Expected session not to have status code %s, but it is.',
+            $this->presenter->presentValue($subject->getStatusCode())
         ));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getNames()
     {
         return [
-            'matchAddress',
-            'matchUrl',
+            'haveStatusCode',
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRequiredArgumentCount()
+    {
+        return 1;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function supportsSubject($subject)
+    {
+        return $subject instanceof Session;
     }
 }

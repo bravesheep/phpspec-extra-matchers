@@ -1,11 +1,12 @@
 <?php
 
-namespace Bravesheep\PhpspecExtraMatchers\Matcher;
+namespace Bravesheep\PhpspecExtraMatchers\Matcher\Mink;
 
 use Behat\Mink\Session;
+use Bravesheep\PhpspecExtraMatchers\Matcher\SimpleMatcher;
 use PhpSpec\Exception\Example\FailureException;
 
-class MinkCookieExistanceMatcher extends SimpleMatcher
+class UrlMatcher extends SimpleMatcher
 {
     /**
      * {@inheritdoc}
@@ -14,7 +15,10 @@ class MinkCookieExistanceMatcher extends SimpleMatcher
     {
         /** @var Session $session */
         $session = $subject;
-        return null !== $session->getCookie($arguments[0]);
+        $expectedAddress = $this->cleanPath($arguments[0]);
+        $currentAddress = $this->cleanPath($session->getCurrentUrl());
+
+        return $expectedAddress === $currentAddress;
     }
 
     /**
@@ -27,8 +31,9 @@ class MinkCookieExistanceMatcher extends SimpleMatcher
     protected function getFailureException($name, $subject, array $arguments)
     {
         return new FailureException(sprintf(
-            'Expected to have cookie %s, but one was not found.',
-            $this->presenter->presentString($arguments[0])
+            'Expected %s to be %s, but it is not.',
+            $this->presenter->presentString($this->cleanPath($subject->getCurrentUrl())),
+            $this->presenter->presentString($this->cleanPath($arguments[0]))
         ));
     }
 
@@ -42,8 +47,9 @@ class MinkCookieExistanceMatcher extends SimpleMatcher
     protected function getNegativeFailureException($name, $subject, array $arguments)
     {
         return new FailureException(sprintf(
-            'Expected not to have cookie %s, but one was found.',
-            $this->presenter->presentString($arguments[0])
+            'Expected %s not to be %s, but it is.',
+            $this->presenter->presentString($this->cleanPath($subject->getCurrentUrl())),
+            $this->presenter->presentString($this->cleanPath($arguments[0]))
         ));
     }
 
@@ -53,7 +59,10 @@ class MinkCookieExistanceMatcher extends SimpleMatcher
     protected function getNames()
     {
         return [
-            'haveCookie',
+            'haveAddress',
+            'beAtAddress',
+            'haveUrl',
+            'beAtUrl',
         ];
     }
 
@@ -71,5 +80,15 @@ class MinkCookieExistanceMatcher extends SimpleMatcher
     protected function supportsSubject($subject)
     {
         return $subject instanceof Session;
+    }
+
+    /**
+     * Retrieves path from url and trims scriptname from the URL.
+     * @param string $path
+     * @return string
+     */
+    protected function cleanPath($path)
+    {
+        return parse_url(preg_replace('/^\/[^\.\/]+\.php/', '', $path), PHP_URL_PATH);
     }
 }

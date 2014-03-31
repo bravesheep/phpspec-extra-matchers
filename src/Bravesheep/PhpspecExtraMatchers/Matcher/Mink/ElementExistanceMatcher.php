@@ -1,12 +1,13 @@
 <?php
 
-namespace Bravesheep\PhpspecExtraMatchers\Matcher;
+namespace Bravesheep\PhpspecExtraMatchers\Matcher\Mink;
 
 use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Session;
+use Bravesheep\PhpspecExtraMatchers\Matcher\SimpleMatcher;
 use PhpSpec\Exception\Example\FailureException;
 
-class MinkElementExistanceMatcher extends SimpleMatcher
+class ElementExistanceMatcher extends SimpleMatcher
 {
     /**
      * {@inheritdoc}

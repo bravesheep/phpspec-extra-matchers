@@ -17,12 +17,16 @@
 
 Additionally some matchers specific in a mink context are available:
 
-* **`MinkCookieExistanceMatcher`**: adds `haveCookie(name)`, which matches for `Behat\Mink\Session` objects if a cookie
+* **`Mink\CookieExistanceMatcher`**: adds `haveCookie(name)`, which matches for `Behat\Mink\Session` objects if a cookie
   was set in the session.
-* **`MinkElementExistanceMatcher`**: adds `matchElement(selector, locator)`, `haveElement(selector, locator)`,
+* **`Mink\ElementExistanceMatcher`**: adds `matchElement(selector, locator)`, `haveElement(selector, locator)`,
   `haveMatchingElement(selector, locator)` and `containElement(selector, locator)`, and works on
   `Behat\Mink\Element\ElementInterface` instances. They match if `element->has(selector, locator)` returns true.
-* **`MinkRegexUrlMatcher`**: adds `matchAddress(path)` and `matchUrl(path)` which match if the regex matches the path,
+* **`Mink\RegexUrlMatcher`**: adds `matchAddress(path)` and `matchUrl(path)` which match if the regex matches the path,
   it works on `Behat\Mink\Session` subjects.
-* **`MinkUrlMatcher`**: adds `haveAddress(path)`, `haveUrl(path)`, `beAtAddress(path)` and `beAtUrl(path)`, matches if
+* **`Mink\UrlMatcher`**: adds `haveAddress(path)`, `haveUrl(path)`, `beAtAddress(path)` and `beAtUrl(path)`, matches if
   the current url is at the indicated path. It works on `Behat\Mink\Session` subjects.
+* **`Mink\StatusCodeMatcher`**: adds `haveStatusCode(code)` and matches for `Behat\Mink\Session` subjects on the status
+  code.
+* **`Mink\TextMatcher`**: adds `containText(string)` and matches for `Behat\Mink\Element\ElementInterface` subjects if
+  their text contains the expected string.

@@ -1,11 +1,11 @@
 <?php
 
-namespace Bravesheep\PhpspecExtraMatchers\Matcher;
+namespace Bravesheep\PhpspecExtraMatchers\Matcher\Mink;
 
 use Behat\Mink\Session;
 use PhpSpec\Exception\Example\FailureException;
 
-class MinkUrlMatcher extends SimpleMatcher
+class RegexUrlMatcher extends UrlMatcher
 {
     /**
      * {@inheritdoc}
@@ -14,10 +14,9 @@ class MinkUrlMatcher extends SimpleMatcher
     {
         /** @var Session $session */
         $session = $subject;
-        $expectedAddress = $this->cleanPath($arguments[0]);
+        $regex = $arguments[0];
         $currentAddress = $this->cleanPath($session->getCurrentUrl());
-
-        return $expectedAddress === $currentAddress;
+        return 1 === preg_match($regex, $currentAddress);
     }
 
     /**
@@ -30,9 +29,9 @@ class MinkUrlMatcher extends SimpleMatcher
     protected function getFailureException($name, $subject, array $arguments)
     {
         return new FailureException(sprintf(
-            'Expected %s to be %s, but it is not.',
+            'Expected %s to match %s, but it does not.',
             $this->presenter->presentString($this->cleanPath($subject->getCurrentUrl())),
-            $this->presenter->presentString($this->cleanPath($arguments[0]))
+            $this->presenter->presentString($arguments[0])
         ));
     }
 
@@ -46,48 +45,17 @@ class MinkUrlMatcher extends SimpleMatcher
     protected function getNegativeFailureException($name, $subject, array $arguments)
     {
         return new FailureException(sprintf(
-            'Expected %s not to be %s, but it is.',
+            'Expected %s not to match %s, but it does.',
             $this->presenter->presentString($this->cleanPath($subject->getCurrentUrl())),
-            $this->presenter->presentString($this->cleanPath($arguments[0]))
+            $this->presenter->presentString($arguments[0])
         ));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getNames()
     {
         return [
-            'haveAddress',
-            'beAtAddress',
-            'haveUrl',
-            'beAtUrl',
+            'matchAddress',
+            'matchUrl',
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRequiredArgumentCount()
-    {
-        return 1;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function supportsSubject($subject)
-    {
-        return $subject instanceof Session;
-    }
-
-    /**
-     * Retrieves path from url and trims scriptname from the URL.
-     * @param string $path
-     * @return string
-     */
-    protected function cleanPath($path)
-    {
-        return parse_url(preg_replace('/^\/[^\.\/]+\.php/', '', $path), PHP_URL_PATH);
     }
 }
