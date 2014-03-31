@@ -15,7 +15,12 @@ class TextMatcher extends SimpleMatcher
     {
         /** @var ElementInterface $element */
         $element = $subject;
-        return $element->has('named', ['content', $arguments[0]]);
+
+        $actual = $element->getText();
+        $actual = preg_replace('/\s+/u', ' ', $actual);
+        $regex  = '/'.preg_quote($arguments[0], '/').'/ui';
+
+        return 1 === preg_match($regex, $actual);
     }
 
     /**
