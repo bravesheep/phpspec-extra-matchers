@@ -1,0 +1,21 @@
+{
+    "name":         "bravesheep/phpspec-extra-matchers",
+    "description":  "Extra matchers for phpspec",
+    "keywords":     ["BDD", "SpecBDD", "TDD", "spec", "specification", "phpspec"],
+    "license":      "MIT",
+    "authors":      [
+        {
+            "name": "Ruben Nijveld",
+            "email": "ruben@bravesheep.nl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Bravesheep\\PhpspecExtraMatchers\\": "src/Bravesheep/PhpspecExtraMatchers/"
+        }
+    },
+    "require": {
+        "phpspec/phpspec": "2.*",
+        "behat/mink": "1.5.*"
+    }
+}
