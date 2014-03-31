@@ -33,7 +33,7 @@ class TextMatcher extends SimpleMatcher
     protected function getFailureException($name, $subject, array $arguments)
     {
         return new FailureException(sprintf(
-            'Expected element to contain text %s, but it is does not.',
+            'Expected element to contain text %s, but it does not.',
             $this->presenter->presentString($arguments[0])
         ));
     }
@@ -48,7 +48,7 @@ class TextMatcher extends SimpleMatcher
     protected function getNegativeFailureException($name, $subject, array $arguments)
     {
         return new FailureException(sprintf(
-            'Expected element not to contain text %s, but it is does.',
+            'Expected element not to contain text %s, but it does.',
             $this->presenter->presentString($arguments[0])
         ));
     }
