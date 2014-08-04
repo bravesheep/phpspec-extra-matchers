@@ -15,7 +15,7 @@
         }
     },
     "require": {
-        "phpspec/phpspec": "2.*",
-        "behat/mink": "1.5.*"
+        "phpspec/phpspec": "~2.0",
+        "behat/mink": "~1.5"
     }
 }
